@@ -1,0 +1,7 @@
+chien
+maison
+voiture
+chaise
+pomme
+ordinateur
+python
