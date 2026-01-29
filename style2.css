@@ -1,0 +1,47 @@
+.lettre{
+    display: inline-block;
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid #000;
+        text-decoration: none;
+        color: #000552;
+}
+
+#clavier {
+position: fixed; 
+    bottom: 10%;   
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+#guessword {
+position: fixed; 
+    top: 30%;   
+    left: 0;
+    right: 0;
+    text-align: center;
+font-size: x-large;
+}
+
+.use{
+display: inline-block;
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #000;
+    text-decoration: none;
+    color : rgb(198, 198, 198);
+}
+
+#ui{
+position: fixed;
+    top : 5px;
+    text-align: center;
+    left: 0;
+    right: 0;
+}
+
+.reset{
+position: fixed;
+    bottom: 5px
+}

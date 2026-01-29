@@ -30,7 +30,7 @@ $GuessWord = $_SESSION['word'];
 <head>
     <meta charset="UTF-8">
     <title>Pendu</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style2.css">
 </head>
 <body>
     <div id="guessword">
