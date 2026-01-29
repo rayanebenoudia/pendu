@@ -1,58 +1,76 @@
 <?php
 session_start();
 
-$alphabet= ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
-$mot=['p','a','i','n'];
-$longueur_de_mot= array();
-$chances = 10;
-$tours = 10; 
-$i = 0;
-if(isset($_POST['letter'])){
-     if ( $mot[$i]=== $_POST['letter']){
-        echo "c'est bien la lettre que je cherche";
-        echo "condition verifiée: ".$mot[$i]."".$_POST['letter'] ;
-        
-     }
-     echo $mot[$i];
 
+
+$mots = file('mots.txt');
+
+if (!isset($_SESSION['word'])) {
+    $word_select = trim($mots[rand( 0, count($mots) - 1)]);
+    $_SESSION['word'] = $word_select;
+    $_SESSION['guessed'] = [$word_select[0]];
+    // var_dump(trim($word_select));
 }
-var_dump($_POST); 
-/*
-faire deviner un mot avec un nombre de chance limité 
-le mot doit etre masqué
-1 chance  = 1 tour & chaque tour = une lettre 
-lettre valide = elle s'affiche 
-lettre invalide = elle s'affiche dans un bloc 
 
-comment comparé une lettre avec les  lettres d'un mot 
-il faudra afficher le nombre d'occurence d'une lettre dans le mot rechercher 
-si la lettre apparait deux fois alors l'afficher deux fois à l'emplacement qui correspond
-si la lettre apparait une fois l'afficher une fois a l'emplacement qui correspond
-si la lettre n'apparait pas alors l'afficher dans le bloc " lettre invalide"
+if (isset($_GET['lettre'])) {
+    $_SESSION['guessed'][] = $_GET['lettre'];
+}
 
+if (isset($_GET['reset'])) {
+    session_destroy();
+    header('Location: index.php');
+    exit;
+}
 
-
-
-
-*/
-
-
+$GuessWord = $_SESSION['word'];
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Pendu</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <form>
-        <input type= "alphabet" name= "lettre">entrez une lettre</input>
-        <input type= "submit" name= "submit"></input>
+    <div id="guessword">
+        <?php
+        $i = 0;
+        $win = true;
+        // var_dump($GuessWord);
+        while (isset($GuessWord[$i])) {
+            if (in_array($GuessWord[$i], $_SESSION['guessed'])) {
+                echo $GuessWord[$i] . '';
+            }
+            elseif ($GuessWord[$i]== '-') {
+            echo '- ';
+            }
+            else {
+                echo '_ ';
+                $win = false;
+            }
+            $i++;
+        }
+        ?>
+    </div>
 
-        
+    <div id="clavier">
+        <?php
+        if ($win) {
+            echo "gg";
+        } else {
+            $alphabet = range('a', end: 'z');
+            foreach ($alphabet as $lettre) {
+                if (!in_array($lettre, $_SESSION['guessed'])) {
+                    echo '<a href="?lettre=' . $lettre . '" class="lettre">' . $lettre . '</a> ';
+                } else {
+                    echo '<span class="use">' . $lettre . '</span> ';
+                }
+            }
+        }
+        ?>
+    </div>
 
-    </form>
+    <br><br><a href="?reset=1">reset</a>
 </body>
 </html>
