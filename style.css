@@ -32,3 +32,16 @@ display: inline-block;
     text-decoration: none;
     color : rgb(198, 198, 198);
 }
+
+#ui{
+position: fixed;
+    top : 5px;
+    text-align: center;
+    left: 0;
+    right: 0;
+}
+
+.reset{
+position: fixed;
+    bottom: 5px
+}
