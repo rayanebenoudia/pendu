@@ -103,7 +103,7 @@ $try = $_SESSION['try'];
     <div id="clavier">
         <?php
         if ($win) {
-            echo "Bravo";  // si il gagne 
+            echo "Félicitation tu as gagner en " . $try . " Tentatives !";  // si il gagne 
         } elseif ($remaining_lives <= 0) {
             echo "Perdu le mot était " . $Guessword; // Si il perd
         } else { // Sinon on affiche le clavier
