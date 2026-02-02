@@ -61,9 +61,14 @@ $try = $_SESSION['try'];
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<nav>
+        <a href="index.php">Jeu</a> |
+        <span class="title">PENDU</span> |
+        <a href="admin.php">Admin</a>
+    </nav>
+    <hr>
 
     <div id="ui"> <!-- Titre plus info sur nos chance restantes -->
-        <h1>PENDU</h1>
         <p>Chance restantes <?php echo $remaining_lives; ?></p> 
         <p>Tentatives <?php echo $try; ?></p>
     </div>

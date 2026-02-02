@@ -91,3 +91,8 @@ footer {
     object-fit: contain;
     display: block;
 }
+
+.title{
+    font-size: x-large;
+    font-weight: bold;
+}
