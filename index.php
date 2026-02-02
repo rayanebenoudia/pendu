@@ -122,7 +122,7 @@ $try = $_SESSION['try'];
                 $errors = 8 - $remaining_lives;
                 
                 if ($errors > 0) {
-                    echo '<img src="pendu' . $errors . '.png" alt="Pendu" class="hangman">';
+                    echo '<img src="image/pendu' . $errors . '.png" alt="Pendu" class="hangman">';
                 }
             ?>
         </div>
