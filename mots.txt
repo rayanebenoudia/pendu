@@ -1,7 +1,1 @@
-chaise
-table
-telephone
-banane
-pomme
-orange
-chocolat
+feuille

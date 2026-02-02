@@ -1,50 +1,135 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['mot_secret'])) {
+$words = file('mots.txt');
 
-    $mots = file('mots.txt');
 
-    $i = 0;
-    while (isset($mots[$i])) {
-        $i++;
-    }
-
-    $aleatoire = rand(0, $i - 1);
-    $_SESSION['mot_secret'] = $mots[$aleatoire];
+if (!isset($_SESSION['word'])) { // Si pas de session je prend un mot a deviner et je set mes _SESSION en valeur par défaut
+    $selected_word = trim($words[rand(0, count($words) - 1)]);
+    $_SESSION['word'] = $selected_word;
+    $_SESSION['guessed'] = [$selected_word[0]];
+    $_SESSION['vie'] = 8;
+    $_SESSION['try'] = 0;
 }
 
-$mot = $_SESSION['mot_secret'];
+$Guessword = $_SESSION['word'];  // Quand je reviens sur ma page je me souviens du mot
+
+if (isset($_GET['letter'])) { // Quand il y à une tentative
+    $clicked_letter = $_GET['letter'];
+    $already_guessed = false;
+    
+    foreach ($_SESSION['guessed'] as $checked_letter) { // Je fais que ça ne se répète pas
+        if ($checked_letter == $clicked_letter) {
+            $already_guessed = true;
+        }
+    }
+
+    if (!$already_guessed && $_SESSION['vie'] > 0) { // Il faut ne pas avoir perdu
+        $_SESSION['guessed'][] = $clicked_letter;
+        $_SESSION['try']++;
+        
+        $is_correct = false;
+        $i = 0;
+        while (isset($Guessword[$i])) {  // C'est faux tant qu'on ne trouve pas la lettre le mot
+            if ($Guessword[$i] == $clicked_letter) {
+                $is_correct = true;
+            }
+            $i++;
+        }
+
+        if (!$is_correct) {
+            $_SESSION['vie'] --;
+        }
+    }
+}
+
+if (isset($_GET['reset'])) {
+    session_destroy();
+    header('Location: index.php');
+    exit;
+}
+
+$remaining_lives = $_SESSION['vie'];
+$try = $_SESSION['try'];
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Jeu du Pendu</title>
+    <title>Pendu</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Jeu du Pendu</h1>
+    <div id="ui"> <!-- Titre plus info sur nos chance restantes -->
+        <h1>PENDU</h1>
+        <p>Chance restantes <?php echo $remaining_lives; ?></p> 
+        <p>Tentatives <?php echo $try; ?></p>
+    </div>
 
-<h2>Mot à deviner :</h2>
+    <div id="guessword">
+        <?php
+        $x = 0;
+        $win = true;
+        while (isset($Guessword[$x])) {
+            $found = false;
+            foreach ($_SESSION['guessed'] as $g) {
+                if ($Guessword[$x] == $g) {
+                    $found = true;
+                }
+            }
 
-<p>
-<?php
+            if ($found) {
+                echo $Guessword[$x] . ' ';
+            } elseif ($Guessword[$x] == '-') {
+                echo '- ';
+            } else {
+                echo '_ ';
+                $win = false;
+            }
+            $x++;
+        }
+        ?>
+    </div>
+    
 
-$position = 0;
-while (isset($mot[$position])) {
-    echo "_ ";
-    $position++;
-}
-?>
-</p>
-
-<h2>Propose une lettre :</h2>
-<form method="post">
-    <input type="text" name="lettre" maxlength="1" required>
-    <button type="submit">Valider</button>
-</form>
+    <div id="clavier">
+        <?php
+        if ($win) {
+            echo "Bravo";  // si il gagne 
+        } elseif ($remaining_lives <= 0) {
+            echo "Perdu le mot était " . $Guessword; // Si il perd
+        } else { // Sinon on affiche le clavier
+            $alphabet = range('a', 'z');
+            foreach ($alphabet as $letter) {
+                $is_used = false;
+                foreach ($_SESSION['guessed'] as $used_letter) {  // C'est faux jusqu'a quand la trouve dans la liste
+                    if ($used_letter == $letter) {
+                        $is_used = true;
+                    }
+                }
+                if (!$is_used) {
+                    echo '<a href="?letter=' . $letter . '" class="lettre">' . $letter . '</a> ';  // Pas utilisé normal
+                } else {
+                    echo '<span class="use">' . $letter . '</span> ';  // Utilisé grisé
+                }
+            }
+        }
+        ?>
+        <div class="hangman-area">
+            <?php 
+                $errors = 8 - $remaining_lives;
+                
+                if ($errors > 0) {
+                    echo '<img src="pendu' . $errors . '.png" alt="Pendu" class="hangman">';
+                }
+            ?>
+        </div>
+    </div>
 
 </body>
+<footer>
+        <br><br><a class= reset href="?reset=1">Recommencer</a>
+</footer>
 </html>

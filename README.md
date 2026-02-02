@@ -37,3 +37,8 @@ si le joueur envoie une lettre
 tant que la lettre du mot existe
 si la lettre du mot est egal a la lettre envoyée
 memoriser la lettre a cette position
+
+
+
+<?php include 'header.php'; ?>
+<?php include 'footer.php'; ?>
