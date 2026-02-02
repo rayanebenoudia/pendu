@@ -61,6 +61,7 @@ $try = $_SESSION['try'];
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div id="ui"> <!-- Titre plus info sur nos chance restantes -->
         <h1>PENDU</h1>
         <p>Chance restantes <?php echo $remaining_lives; ?></p> 
@@ -91,6 +92,7 @@ $try = $_SESSION['try'];
         }
         ?>
     </div>
+    
 
     <div id="clavier">
         <?php
@@ -115,6 +117,15 @@ $try = $_SESSION['try'];
             }
         }
         ?>
+        <div class="hangman-area">
+            <?php 
+                $errors = 8 - $remaining_lives;
+                
+                if ($errors > 0) {
+                    echo '<img src="pendu' . $errors . '.png" alt="Pendu" class="hangman">';
+                }
+            ?>
+        </div>
     </div>
 
 </body>
